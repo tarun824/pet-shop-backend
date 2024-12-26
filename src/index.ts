@@ -4,8 +4,26 @@ import { Request, Response } from 'express';
 import rateLimit from "express-rate-limit"
 import mainRouter from "./routers";
 import bodyParser from "body-parser";
+import redis from "redis"
 const app = express()
 const prisma = new PrismaClient()
+
+const redisPort = 'redis://localhost:6379';
+const redisClient = redis.createClient(
+
+    {
+        url: redisPort,
+    }
+);
+
+async function redisConnection() {
+    await redisClient.connect();
+}
+redisConnection()
+
+redisClient.on("error", (e) => {
+    console.log("Redis error:" + e)
+})
 
 const rateLimiter = rateLimit({
     windowMs: 60 * 1000,
@@ -48,4 +66,4 @@ app.listen(3000, () => {
     console.log("server is runing in port 3000")
 })
 
-export { app, prisma }
+export { app, prisma, redisClient }
