@@ -1,0 +1,19 @@
+version: '3'
+services:
+  redis-server:
+    image: "redis"
+  node-app:
+    build: .
+    ports:
+      - "3000:3000"
+  
+  postgresDB:
+    image: "postgres"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db 
+    volumes:
+    - /data/db
+    ports:
+      - "5432:5432"

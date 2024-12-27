@@ -5,6 +5,11 @@ import { z } from "zod";
 export const CreateUserController = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
 
+
+    console.log(name)
+    console.log(email)
+    console.log(password)
+
     const userSchema = z.object({
         name: z.string().min(3, "Name must be at least 3 characters"),
         email: z.string().email("Invalid email format"),
@@ -19,17 +24,26 @@ export const CreateUserController = async (req: Request, res: Response) => {
         res.send({ "status": 0, "message": "Validation Failed :" + parseResult.error })
         return;
     }
-    const user = await prisma.user.create({
-        data: {
-            name: name,
-            email: email,
-            password: password
-        },
-    });
-    if (user) {
+    console.log(name)
+    console.log(email)
+    console.log(password)
 
-        res.send({ "status": 1, "data": user })
-    } else {
-        res.send({ "status": 0, "message": "somthing went wrong" })
+    try {
+        const user = await prisma.user.create({
+            data: {
+                name: name,
+                email: email,
+                password: password
+            },
+        });
+        if (user) {
+
+            res.send({ "status": 1, "data": user })
+        } else {
+            res.send({ "status": 0, "message": "somthing went wrong" })
+        }
+    } catch (e) {
+        res.send({ "status": 0, "message": "somthing went wrong :" + e })
+
     }
 };

@@ -28,6 +28,7 @@ export const getPetCacheDataController = async (req: Request, res: Response) => 
         console.log(e)
         res.send({ "status": 0, "message": "got some error" })
     }
+    // res.send({ "status": 0, "message": "got some error" })
 
     // const pet = await prisma.pet.findFirst({
     //     where: {
